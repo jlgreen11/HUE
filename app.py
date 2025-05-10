@@ -90,8 +90,7 @@ if st.button("Guess"):
             combined = lab1
         (col, row), dist = best_match(combined)
         st.success(f"Try **{col}{row}**  (distance score ≈ {dist:.1f})")
-        st.caption("Column letter (A‑P) & row number (1‑30).
-Smaller distance = closer match.")
+        st.caption("Column letter (A‑P) & row number (1‑30). \nSmaller distance = closer match.")
 
 st.divider()
 st.markdown("ℹ️ *Prototype logic: BASIC dictionary & simple brightness modifiers. Feel free to expand!*")
