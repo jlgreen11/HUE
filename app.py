@@ -43,26 +43,21 @@ BASIC = {
     "white":   (245,245,245),
 }
 
+import json, re
+with open("xkcd_colors.json") as f:
+    XKCD = json.load(f)  # dict: name → "#rrggbb"
+
 def phrase_to_rgb(phrase):
     phrase = phrase.lower()
-    rgb = None
-    # find colour word in BASIC
-    for key in BASIC:
-        if key in phrase:
-            rgb = BASIC[key]
-            break
-    # descriptors tweak brightness/saturation
-    if rgb:
-        r,g,b = rgb
-        if "dark" in phrase or "deep" in phrase or "forest" in phrase:
-            r,g,b = [int(x*0.65) for x in (r,g,b)]
-        elif "light" in phrase or "pale" in phrase or "pastel" in phrase:
-            r,g,b = [min(255,int(x*1.3)+40) for x in (r,g,b)]
-        elif "neon" in phrase or "bright" in phrase or "vivid" in phrase:
-            r,g,b = [min(255,int(x*1.5)) for x in (r,g,b)]
-        return (r,g,b)
-    # fallback mid‑gray
-    return (127,127,127)
+    for name, hexcode in XKCD.items():
+        if re.search(rf"\\b{name}\\b", phrase):
+            r = int(hexcode[1:3], 16)
+            g = int(hexcode[3:5], 16)
+            b = int(hexcode[5:7], 16)
+            return (r, g, b)
+    # descriptor tweaks (dark/light) handled below…
+    return (127, 127, 127)  # fallback
+
 
 # ---------------------------------------------------------------------------
 st.title("Hues & Cues Helper")
